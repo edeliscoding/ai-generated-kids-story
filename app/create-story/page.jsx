@@ -19,19 +19,79 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
+import { chatSession } from "../config/GeminiAi";
+import { set } from "mongoose";
+import axios from "axios";
+import Modal from "../components/Modal";
+import Loader from "../components/Loader";
 export default function StoryCreator() {
   const [subject, setSubject] = useState("");
   const [storyType, setStoryType] = useState("");
   const [ageGroup, setAgeGroup] = useState("");
   const [imageStyle, setImageStyle] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const CREATE_STORY_PROMPT = process.env.NEXT_PUBLIC_CREATE_STORY_PROMPT;
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     console.log({ subject, storyType, ageGroup, imageStyle });
     // Here you would typically send this data to your backend or process it further
   };
 
+  const generateStory = async () => {
+    setLoading(true);
+    //Generate AI story
+    const FINAL_PROMPT = CREATE_STORY_PROMPT.replace("{ageGroup}", ageGroup)
+      .replace("{storyType}", storyType)
+      .replace("{subject}", subject)
+      .replace("{imageStyle}", imageStyle);
+
+    try {
+      //   console.log(FINAL_PROMPT);
+      const result = await chatSession.sendMessage(FINAL_PROMPT);
+      console.log(result?.response.text());
+      setLoading(false);
+      // Save in DB
+      const response = await saveInDb(result?.response.text());
+      console.log(response);
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
+
+    // Generate image
+  };
+
+  const saveInDb = async (output) => {
+    // Save in DB
+    setLoading(true);
+    try {
+      const storyData = {
+        storySubject: subject,
+        storyType,
+        ageGroup,
+        imageStyle,
+        output,
+      };
+      const result = await axios.post("/api/story", { storyData });
+      setLoading(false);
+      return result;
+    } catch (error) {
+      console.error(error);
+      setLoading(false);
+    }
+  };
+  if (loading) {
+    return (
+      <Loader
+        isLoading={loading}
+        gifSrc="/magic-hat.gif"
+        size={200}
+        alt="Loading..."
+      />
+    );
+  }
   return (
     <Card className="w-full max-w-2xl mx-auto">
       <CardHeader>
@@ -108,7 +168,12 @@ export default function StoryCreator() {
         </form>
       </CardContent>
       <CardFooter>
-        <Button type="submit" className="w-full">
+        <Button
+          type="submit"
+          className="w-full"
+          onClick={generateStory}
+          disabled={loading}
+        >
           Create Story
         </Button>
       </CardFooter>
