@@ -75,6 +75,7 @@ export default function StoryCreator() {
         result?.response.text(),
         FirebaseStorageImageUrl
       );
+
       console.log("console.log response", response);
     } catch (error) {
       console.error(error);
@@ -100,6 +101,11 @@ export default function StoryCreator() {
       const result = await axios.post("/api/story", { storyData });
 
       setLoading(false);
+
+      const { storyId } = result.data;
+
+      // Redirect to the view-story page
+      router.push(`/view-story/${storyId}`);
       return result;
     } catch (error) {
       console.error(error);
@@ -117,7 +123,7 @@ export default function StoryCreator() {
     );
   }
   return (
-    <Card className="w-full max-w-2xl mx-auto">
+    <Card className="w-full max-w-2xl mx-auto mt-10">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-center">
           Children's Story Creator

@@ -10,9 +10,12 @@ export async function POST(req) {
   try {
     await connectToDatabase();
     const newStory = new Story(storyData);
-    await newStory.save();
+    const savedStory = await newStory.save();
     return new Response(
-      JSON.stringify({ message: "Story created successfully" }),
+      JSON.stringify({
+        message: "Story created successfully",
+        storyId: savedStory._id.toString(),
+      }),
       {
         status: 201,
       }
