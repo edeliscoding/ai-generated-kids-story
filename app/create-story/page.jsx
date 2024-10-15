@@ -24,12 +24,17 @@ import { set } from "mongoose";
 import axios from "axios";
 import Modal from "../components/Modal";
 import Loader from "../components/Loader";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
 export default function StoryCreator() {
   const [subject, setSubject] = useState("");
   const [storyType, setStoryType] = useState("");
   const [ageGroup, setAgeGroup] = useState("");
   const [imageStyle, setImageStyle] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const { user } = useUser();
+  const router = useRouter();
 
   const CREATE_STORY_PROMPT = process.env.NEXT_PUBLIC_CREATE_STORY_PROMPT;
 
@@ -50,20 +55,34 @@ export default function StoryCreator() {
     try {
       //   console.log(FINAL_PROMPT);
       const result = await chatSession.sendMessage(FINAL_PROMPT);
-      console.log(result?.response.text());
+      const story = JSON.parse(result?.response.text());
+      // generate image
+      const imageResponse = await axios.post("/api/generate-image", {
+        prompt: `Add text with title:  ${story?.story_name} in bold text for book cover, ${story?.cover_image?.description}`,
+      });
+      console.log(imageResponse?.data?.imageUrl);
+      //   console.log("from page", imageResponse?.data);
+      //   console.log("imageResponse", imageResponse);
+      const AiImageUrl = imageResponse?.data?.imageUrl;
+      //   //   console.log("AiImageUrl", AiImageUrl);
+      const imageResult = await axios.post("/api/save-image", {
+        url: AiImageUrl,
+      });
+      const FirebaseStorageImageUrl = imageResult.data.imageUrl;
       setLoading(false);
       // Save in DB
-      const response = await saveInDb(result?.response.text());
-      console.log(response);
+      const response = await saveInDb(
+        result?.response.text(),
+        FirebaseStorageImageUrl
+      );
+      console.log("console.log response", response);
     } catch (error) {
       console.error(error);
       setLoading(false);
     }
-
-    // Generate image
   };
 
-  const saveInDb = async (output) => {
+  const saveInDb = async (geminiResponse, FirebaseStorageImageUrl) => {
     // Save in DB
     setLoading(true);
     try {
@@ -72,9 +91,14 @@ export default function StoryCreator() {
         storyType,
         ageGroup,
         imageStyle,
-        output,
+        output: geminiResponse,
+        coverImage: FirebaseStorageImageUrl,
+        userEmail: user?.primaryEmailAddress?.emailAddress,
+        userImage: user?.imageUrl,
+        userName: user?.fullName,
       };
       const result = await axios.post("/api/story", { storyData });
+
       setLoading(false);
       return result;
     } catch (error) {

@@ -9,11 +9,13 @@ const StorySchema = new mongoose.Schema(
     output: String,
     coverImage: String,
     author: String,
+    userEmail: String,
+    userName: String,
+    userImage: String,
   },
   { timestamps: true }
 );
 
-const Story =
-  mongoose.models.StorySchema || mongoose.model("Story", StorySchema);
+const Story = mongoose.models.Story || mongoose.model("Story", StorySchema);
 
 export default Story;
