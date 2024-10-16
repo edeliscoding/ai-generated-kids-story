@@ -14,6 +14,8 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
+import { useContext } from "react";
+import { AuthContext } from "../context/authContext";
 
 export default function Navigation() {
   const { isSignedIn } = useAuth();

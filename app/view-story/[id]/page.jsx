@@ -17,6 +17,7 @@ export default function StoryComponent() {
   const [error, setError] = useState(null);
   const bookRef = useRef();
   const [count, setCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const { id } = useParams();
   useEffect(() => {
@@ -41,8 +42,13 @@ export default function StoryComponent() {
   if (!story) return <div>Loading...</div>;
 
   const storyChapterParsed = JSON.parse(story?.output);
-
-  // const [currentPage, setCurrentPage] = useState(0);
+  // Handle page flip event
+  // const onPageFlip = () => {
+  //   const pageIndex = bookRef.current.pageFlip().getCurrentPageIndex();
+  //   // alert("page Index", pageIndex);
+  //   // setCurrentPage(pageIndex);
+  //   // alert("Page Flipped");
+  // };
   return (
     <div className="mt-10 mx-auto container">
       <h2 className="font-bold text-4xl text-center">{story?.storySubject}</h2>
@@ -54,6 +60,7 @@ export default function StoryComponent() {
           className="mt-10 HTMLFlipBook"
           useMouseEvents={false}
           ref={bookRef}
+          // onFlip={onPageFlip} // Trigger event when flipping the page
         >
           <div>
             <BookCover imageUrl={story?.coverImage} />
@@ -62,6 +69,8 @@ export default function StoryComponent() {
             (item, index) => (
               <div className="bg-white p-2 md:p-10 border">
                 <StoryPages
+                  pageNumber={index + 1}
+                  // isPageActive={currentPage === index}
                   storyChapter={storyChapterParsed?.chapters[index]}
                 />
               </div>
