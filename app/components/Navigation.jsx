@@ -23,8 +23,10 @@ export default function Navigation() {
       <div className="container flex h-14 items-center">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Image src="/placeholder.svg" width={32} height={32} />
-            <span className="hidden font-bold sm:inline-block">Story App</span>
+            <Image src="/childrenstorylogo.webp" width={32} height={32} />
+            <span className="hidden font-bold sm:inline-block">
+              Kids Story Imagined
+            </span>
           </Link>
           <NavigationMenu>
             <NavigationMenuList>

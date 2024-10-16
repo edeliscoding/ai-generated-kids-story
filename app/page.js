@@ -12,7 +12,7 @@ export default function Home() {
           <CardContent className="p-0">
             <div className="relative h-[300px] bg-[#e6e0d4]">
               <Image
-                src="/playing.webp?height=300&width=600"
+                src="/kidsstoryimagined.webp?height=300&width=600"
                 alt="Robot reading a book"
                 layout="fill"
                 objectFit="cover"
@@ -50,9 +50,10 @@ export default function Home() {
               <CardContent className="p-4">
                 <div className="aspect-square relative mb-4">
                   <Image
-                    src={`/3dcartoon.png?height=200&width=200&text=Feature ${
+                    src={`/3dcartoon${
                       index + 1
-                    }`}
+                    }.png?height=200&width=200&text=Feature
+                    `}
                     alt={feature}
                     layout="fill"
                     objectFit="cover"
@@ -70,7 +71,7 @@ export default function Home() {
           <CardContent className="p-6 flex flex-col md:flex-row items-center">
             <div className="md:w-1/2 mb-6 md:mb-0">
               <Image
-                src="/placeholder.svg?height=300&width=300&text=Robot Writing"
+                src="/3dcartoon.png?height=300&width=300&text=Robot Writing"
                 alt="Robot writing a story"
                 width={300}
                 height={300}
