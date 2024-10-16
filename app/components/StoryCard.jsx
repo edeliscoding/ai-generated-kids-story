@@ -2,7 +2,7 @@
 import { useRouter } from "next/navigation";
 import React from "react";
 
-function MyStoriesCard({ story }) {
+function StoryCard({ story }) {
   const router = useRouter();
   return (
     <div
@@ -27,4 +27,4 @@ function MyStoriesCard({ story }) {
   );
 }
 
-export default MyStoriesCard;
+export default StoryCard;

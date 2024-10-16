@@ -1,14 +1,22 @@
 "use client";
 import BookCover from "@/app/components/BookCover";
-import StoryChapters from "@/app/components/StoryChapters";
+
 import StoryPages from "@/app/components/StoryPages";
+import { Button } from "@/components/ui/button";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import HTMLFlipBook from "react-pageflip";
+import {
+  IoIosArrowDropleftCircle,
+  IoIosArrowDroprightCircle,
+} from "react-icons/io";
+import { set } from "mongoose";
 
 export default function StoryComponent() {
   const [story, setStory] = useState(null);
   const [error, setError] = useState(null);
+  const bookRef = useRef();
+  const [count, setCount] = useState(0);
 
   const { id } = useParams();
   useEffect(() => {
@@ -19,7 +27,7 @@ export default function StoryComponent() {
           throw new Error("Failed to fetch story");
         }
         const data = await response.json();
-        console.log("story", data);
+        // console.log("story", data);
         setStory(data);
       } catch (err) {
         setError(err.message);
@@ -34,15 +42,18 @@ export default function StoryComponent() {
 
   const storyChapterParsed = JSON.parse(story?.output);
 
+  // const [currentPage, setCurrentPage] = useState(0);
   return (
     <div className="mt-10 mx-auto container">
-      <h2 className="font-bold text-4xl text-center ">{story?.storySubject}</h2>
-      <div className="mt-10">
+      <h2 className="font-bold text-4xl text-center">{story?.storySubject}</h2>
+      <div className="mt-10 relative">
         <HTMLFlipBook
           width={500}
           height={500}
           showCover={true}
-          className="mt-10"
+          className="mt-10 HTMLFlipBook"
+          useMouseEvents={false}
+          ref={bookRef}
         >
           <div>
             <BookCover imageUrl={story?.coverImage} />
@@ -57,8 +68,35 @@ export default function StoryComponent() {
             )
           )}
         </HTMLFlipBook>
+        {count !== 0 && (
+          <div className="absolute -left-10 top-[250px]">
+            <div
+              className="flex flex-col gap-2"
+              onClick={() => {
+                bookRef.current.pageFlip().flipPrev();
+                setCount(count - 1);
+              }}
+            >
+              <IoIosArrowDropleftCircle size={30} />
+              <span className="text-xs">Prev Page</span>
+            </div>
+          </div>
+        )}
+        {count !== storyChapterParsed?.chapters?.length - 1 && (
+          <div className="absolute -right-5 top-[250px]">
+            <div
+              className="flex flex-col gap-2"
+              onClick={() => {
+                bookRef.current.pageFlip().flipNext();
+                setCount(count + 1);
+              }}
+            >
+              <IoIosArrowDroprightCircle size={30} />
+              <span className="text-xs">Next Page</span>
+            </div>
+          </div>
+        )}
       </div>
-      {/* <StoryChapters story={story} /> */}
     </div>
   );
 }
