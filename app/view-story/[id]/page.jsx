@@ -49,7 +49,7 @@ export default function StoryComponent() {
           </div>
           {[...Array(storyChapterParsed?.chapters?.length)].map(
             (item, index) => (
-              <div className="bg-white p-10 border">
+              <div className="bg-white p-2 md:p-10 border">
                 <StoryPages
                   storyChapter={storyChapterParsed?.chapters[index]}
                 />
@@ -61,15 +61,4 @@ export default function StoryComponent() {
       {/* <StoryChapters story={story} /> */}
     </div>
   );
-}
-
-{
-  /* <div>
-<BookCover imageUrl={story?.coverImage} />
-</div>
-{[...Array(story?.output?.chapters?.length)].map((item, index) => (
-<div className="bg-white p-10 border">
-  <StoryPages storyChapter={story?.output?.chapters[index]} />
-</div>
-))} */
 }
