@@ -8,14 +8,14 @@ import {
 import "./globals.css";
 import Navigation from "./components/Navigation";
 import { Toaster } from "react-hot-toast";
-import { AuthContextProvider } from "./context/authContext";
+import { AuthProvider } from "@/app/context/authContext";
 
 export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en">
         <body>
-          <AuthContextProvider>
+          <AuthProvider>
             <Toaster position="top-center" reverseOrder={false} />
             <Navigation />
             {/* <SignedOut>
@@ -25,7 +25,7 @@ export default function RootLayout({ children }) {
             <UserButton />
           </SignedIn> */}
             {children}
-          </AuthContextProvider>
+          </AuthProvider>
         </body>
       </html>
     </ClerkProvider>

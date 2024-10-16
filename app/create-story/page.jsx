@@ -126,7 +126,7 @@ export default function StoryCreator() {
     <Card className="w-full max-w-2xl mx-auto mt-10">
       <CardHeader>
         <CardTitle className="text-2xl font-bold text-center">
-          Children's Story Creator
+          Childrens Story Creator
         </CardTitle>
       </CardHeader>
       <CardContent>

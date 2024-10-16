@@ -25,7 +25,12 @@ export default function Navigation() {
       <div className="container flex h-14 items-center">
         <div className="mr-4 hidden md:flex">
           <Link href="/" className="mr-6 flex items-center space-x-2">
-            <Image src="/childrenstorylogo.webp" width={32} height={32} />
+            <Image
+              src="/childrenstorylogo.webp"
+              width={32}
+              height={32}
+              alt="children story logo"
+            />
             <span className="hidden font-bold sm:inline-block">
               Kids Story Imagined
             </span>
@@ -74,7 +79,7 @@ export default function Navigation() {
               </Button>
             ) : (
               <Button asChild>
-                <Link href="/sign-up">Get Started</Link>
+                <Link href="/dashboard">Get Started</Link>
               </Button>
             )}
             <UserButton />

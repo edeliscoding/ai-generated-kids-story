@@ -1,13 +1,15 @@
 import React from "react";
 import { getMyStories } from "@/app/data/getMyStories";
 import MyStoriesCard from "../components/MyStoriesCard";
+import Credits from "../components/Credits";
 
 async function Dashboard() {
   const myStories = await getMyStories();
-  console.log("myStories", myStories);
+  // console.log("myStories", myStories);
   if (!myStories) {
     return <div>No stories found</div>;
   }
+
   return (
     <>
       <div
@@ -21,9 +23,9 @@ async function Dashboard() {
                 My Stories
               </h1>
               <div className="flex gap-3 p-3 flex-wrap pr-4">
-                <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-[#EEEFF2] pl-4 pr-4">
+                <div className="flex h-8 shrink-0 items-center justify-center gap-x-2 rounded-full bg-[yellow] pl-4 pr-4">
                   <p className="text-[#1C1D22] text-sm font-medium leading-normal">
-                    3 Credit Left
+                    <Credits />
                   </p>
                 </div>
               </div>

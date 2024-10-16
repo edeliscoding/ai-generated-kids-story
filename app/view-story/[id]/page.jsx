@@ -67,7 +67,7 @@ export default function StoryComponent() {
           </div>
           {[...Array(storyChapterParsed?.chapters?.length)].map(
             (item, index) => (
-              <div className="bg-white p-2 md:p-10 border">
+              <div className="bg-white p-2 md:p-10 border" key={index}>
                 <StoryPages
                   pageNumber={index + 1}
                   // isPageActive={currentPage === index}

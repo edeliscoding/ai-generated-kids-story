@@ -23,7 +23,6 @@ import connectToMongoDB from "@/app/lib/mongodb";
 //   }
 // };
 export const getCurrentUser = async (email) => {
-  console.log("get current user called", email);
   await connectToMongoDB();
   try {
     const response = await Users.findOne({ userEmail: email });
