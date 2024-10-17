@@ -29,7 +29,7 @@ import connectToMongoDB from "@/app/lib/mongodb";
 import Users from "@/app/models/users";
 import { revalidatePath } from "next/cache";
 
-export async function updateCredits(credits) {
+export async function deductCredits() {
   const { userId } = auth();
   await connectToMongoDB();
 
@@ -39,15 +39,15 @@ export async function updateCredits(credits) {
       throw new Error("User not found");
     }
 
-    user.credit = user.credit + credits;
+    user.credit = user.credit - 1;
     await user.save();
 
     // Return the updated user data
     return { credit: user.credit };
   } catch (error) {
-    console.error("Error updating credits:", error);
+    console.error("Error deducting credits:", error);
     throw error;
   } finally {
-    revalidatePath("/dashboard");
+    revalidatePath("/create-story");
   }
 }

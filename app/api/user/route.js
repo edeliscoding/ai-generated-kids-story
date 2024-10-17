@@ -3,6 +3,7 @@ import connectToMongoDB from "@/app/lib/mongodb";
 import User from "@/app/models/users";
 
 export async function POST(request) {
+  console.log("from useUserhook called");
   try {
     const { userId } = await request.json();
     await connectToMongoDB();

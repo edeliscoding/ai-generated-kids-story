@@ -26,6 +26,9 @@ import Modal from "../components/Modal";
 import Loader from "../components/Loader";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast";
+import { useAuth } from "../context/authContext";
+import { deductCredits } from "../data/deductCredits";
 export default function StoryCreator() {
   const [subject, setSubject] = useState("");
   const [storyType, setStoryType] = useState("");
@@ -34,8 +37,8 @@ export default function StoryCreator() {
   const [loading, setLoading] = useState(false);
 
   const { user } = useUser();
+  const { user: userContext, error, updateUser } = useAuth();
   const router = useRouter();
-
   const CREATE_STORY_PROMPT = process.env.NEXT_PUBLIC_CREATE_STORY_PROMPT;
 
   const handleSubmit = (e) => {
@@ -45,10 +48,9 @@ export default function StoryCreator() {
   };
 
   const generateStory = async () => {
-    {
-      user.credits <= 0
-        ? alert("Not enough credits. Please buy credits")
-        : null;
+    if (userContext.credit <= 0) {
+      toast.error("You don't have enough credits to create a story.");
+      return;
     }
     setLoading(true);
     //Generate AI story
@@ -80,7 +82,12 @@ export default function StoryCreator() {
         result?.response.text(),
         FirebaseStorageImageUrl
       );
-
+      if (response) {
+        router.push(`/view-story/${response.data.storyId}`);
+        await deductCredits();
+        updateUser({ credit: userContext.credit - 1 });
+        toast.success("Story created successfully");
+      }
       console.log("console.log response", response);
     } catch (error) {
       console.error(error);
@@ -110,7 +117,7 @@ export default function StoryCreator() {
       const { storyId } = result.data;
 
       // Redirect to the view-story page
-      router.push(`/view-story/${storyId}`);
+      // router.push(`/view-story/${storyId}`);
       return result;
     } catch (error) {
       console.error(error);
@@ -203,14 +210,17 @@ export default function StoryCreator() {
         </form>
       </CardContent>
       <CardFooter>
-        <Button
-          type="submit"
-          className="w-full"
-          onClick={generateStory}
-          disabled={loading}
-        >
-          Create Story
-        </Button>
+        <div className="flex flex-col w-full justify-center gap-2">
+          <Button
+            type="submit"
+            className="w-full text-lg"
+            onClick={generateStory}
+            disabled={loading}
+          >
+            Create Story
+          </Button>
+          <span className="text-sm text-center">1 credit will be deducted</span>
+        </div>
       </CardFooter>
     </Card>
   );

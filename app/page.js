@@ -3,6 +3,7 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import Email from "./components/Email";
 
 export default function Home() {
   return (
@@ -22,12 +23,7 @@ export default function Home() {
                   Create and explore stories with Kids Story Generator
                 </h1>
                 <div className="flex w-full max-w-sm items-center space-x-2">
-                  <Input
-                    type="email"
-                    placeholder="Enter your email address"
-                    className="bg-white text-black"
-                  />
-                  <Button type="submit">Join now</Button>
+                  <Email />
                 </div>
               </div>
             </div>
@@ -82,8 +78,7 @@ export default function Home() {
                 Create and explore stories with Kids Story Generator
               </h2>
               <div className="flex items-center space-x-2">
-                <Input type="email" placeholder="Enter your email address" />
-                <Button type="submit">Join now</Button>
+                <Email />
               </div>
             </div>
           </CardContent>

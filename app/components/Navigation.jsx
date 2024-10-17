@@ -16,6 +16,7 @@ import {
 import { cn } from "@/lib/utils";
 import { useContext } from "react";
 import { AuthContext } from "../context/authContext";
+import Credits from "./Credits";
 
 export default function Navigation() {
   const { isSignedIn } = useAuth();
@@ -72,6 +73,7 @@ export default function Navigation() {
           <div className="w-full flex-1 md:w-auto md:flex-none">
             {/* Mobile navigation menu trigger can be added here */}
           </div>
+          {isSignedIn && <Credits />}
           <nav className="flex items-center gap-4">
             {isSignedIn ? (
               <Button asChild>

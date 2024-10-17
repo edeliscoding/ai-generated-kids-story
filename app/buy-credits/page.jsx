@@ -8,7 +8,7 @@ import { useAuth } from "../context/authContext";
 import toast from "react-hot-toast";
 
 function BuyCreditsPage() {
-  const { user } = useAuth();
+  const { user, updateUser } = useAuth();
 
   const router = useRouter();
   const [selectedOption, setSelectedOption] = useState(0);
@@ -31,23 +31,26 @@ function BuyCreditsPage() {
     }
   }, [selectedOption]);
 
-  //   const onPaymentSuccess = async (credits) => {
-  //     // await updateCredits(credits);
-  //     console.log("onPaymentSuccess", credits);
-  //   };
+  // const handleSuccess = async () => {
+  //   // onPaymentSuccess();
+  //   await updateCredits(credits);
+  //   user.credits = user.credits + credits;
 
+  //   // router.push("/dashboard");
+  //   toast.success("Credits added successfully");
+  // };
   const handleSuccess = async () => {
-    // onPaymentSuccess();
-    user.credits = user.credits + credits;
-    await updateCredits(credits);
-    router.push("/dashboard");
-    toast.success("Credits added successfully");
+    try {
+      await updateCredits(credits);
+      updateUser({ credit: user.credit + credits });
+      router.push("/dashboard");
+      toast.success("Credits added successfully");
+    } catch (error) {
+      console.error("Error updating credits:", error);
+      toast.error("Failed to add credits");
+    }
   };
-  //   useEffect(() => {
-  //     if (selectedOption != 0) {
-  //       const price = priceOptions[selectedOption].price;
-  //     }
-  //   }, [selectedOption]);
+
   return (
     <div className="min-h-screen flex justify-center items-center bg-blue-100">
       <div className="w-full max-w-4xl p-6 bg-white rounded-lg shadow-lg">

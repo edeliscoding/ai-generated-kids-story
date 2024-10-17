@@ -1,13 +1,13 @@
 "use client";
 import React, { useContext } from "react";
-import { AuthContext, useAuth } from "../context/authContext";
+import { useAuth } from "../context/authContext";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 function Credits() {
-  const { user, loading, error } = useAuth();
-  //   console.log("currentUser", currentUser);
+  const { user, loading, error, updateUser } = useAuth();
+  console.log("user from Credits", user);
   return (
     <>
       <div className="flex gap-3 items-center">
