@@ -2,6 +2,8 @@
 import React, { useContext } from "react";
 import { AuthContext, useAuth } from "../context/authContext";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 function Credits() {
   const { user, loading, error } = useAuth();
@@ -15,6 +17,11 @@ function Credits() {
         <span className="font-bold text-gray-700">
           {user?.credit} credits left
         </span>
+        <Link href="/buy-credits">
+          <Button className="bg-yellow text-gray-800 secondary hover:text-white hover:bg-yellow-400">
+            Buy more credits
+          </Button>
+        </Link>
       </div>
     </>
   );

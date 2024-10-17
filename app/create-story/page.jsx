@@ -45,6 +45,11 @@ export default function StoryCreator() {
   };
 
   const generateStory = async () => {
+    {
+      user.credits <= 0
+        ? alert("Not enough credits. Please buy credits")
+        : null;
+    }
     setLoading(true);
     //Generate AI story
     const FINAL_PROMPT = CREATE_STORY_PROMPT.replace("{ageGroup}", ageGroup)

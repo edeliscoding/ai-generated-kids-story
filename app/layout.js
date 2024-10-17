@@ -18,12 +18,6 @@ export default function RootLayout({ children }) {
           <AuthProvider>
             <Toaster position="top-center" reverseOrder={false} />
             <Navigation />
-            {/* <SignedOut>
-            <SignInButton />
-          </SignedOut>
-          <SignedIn>
-            <UserButton />
-          </SignedIn> */}
             {children}
           </AuthProvider>
         </body>
