@@ -83,8 +83,10 @@ export default function StoryCreator() {
         FirebaseStorageImageUrl
       );
       if (response) {
-        router.push(`/view-story/${response.data.storyId}`);
-        await deductCredits();
+        const updatedCredits = await deductCredits();
+        if (updatedCredits) {
+          router.push(`/view-story/${response.data.storyId}`);
+        }
         updateUser({ credit: userContext.credit - 1 });
         toast.success("Story created successfully");
       }
