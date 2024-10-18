@@ -204,7 +204,10 @@ export default function StoryCreator() {
 
           <div className="space-y-2">
             <Label className="">Image Style</Label>
-            <ImageSelection />
+            <ImageSelection
+              imagevalue={imageStyle}
+              imageonValueChange={setImageStyle}
+            />
             {/* <RadioGroup
               value={imageStyle}
               onValueChange={setImageStyle}

@@ -1,12 +1,17 @@
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
-export default function ImageSelection() {
+export default function ImageSelection({ imagevalue, imageonValueChange }) {
   return (
-    <RadioGroup defaultValue="option-1" className="grid grid-cols-3 gap-4">
+    <RadioGroup
+      //   defaultValue="option-1"
+      className="grid grid-cols-3 gap-4"
+      value={imagevalue}
+      onValueChange={imageonValueChange}
+    >
       <div>
         <RadioGroupItem
-          value="option-1"
+          value="3d-cartoon"
           id="option-1"
           className="peer sr-only"
         />
@@ -26,7 +31,7 @@ export default function ImageSelection() {
       </div>
       <div>
         <RadioGroupItem
-          value="option-2"
+          value="paper-cut"
           id="option-2"
           className="peer sr-only"
         />
@@ -46,7 +51,7 @@ export default function ImageSelection() {
       </div>
       <div>
         <RadioGroupItem
-          value="option-3"
+          value="water-color"
           id="option-3"
           className="peer sr-only"
         />
@@ -66,7 +71,7 @@ export default function ImageSelection() {
       </div>
       <div>
         <RadioGroupItem
-          value="option-3"
+          value="pixel-style"
           id="option-3"
           className="peer sr-only"
         />
