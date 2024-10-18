@@ -14,7 +14,7 @@ export default function RootLayout({ children }) {
   return (
     <ClerkProvider>
       <html lang="en">
-        <body>
+        <body className="bg-slate-100">
           <AuthProvider>
             <Toaster position="top-center" reverseOrder={false} />
             <Navigation />

@@ -45,7 +45,7 @@ export default function StoryComponent() {
   if (!story) return <div>Loading...</div>;
 
   const storyChapterParsed = JSON.parse(story?.output);
-  console.log("storyChapterParsed", storyChapterParsed);
+  // console.log("storyChapterParsed", storyChapterParsed);
 
   // const onPageFlip = (e) => {
   //   const pageIndex = e.data; // e.data holds the current page index
@@ -86,66 +86,7 @@ export default function StoryComponent() {
   };
 
   return (
-    // <div className="mt-10 mx-auto container">
-    //   <h2 className="font-bold text-4xl text-center">{story?.storySubject}</h2>
-    //   <div className="mt-10 relative">
-    //     <HTMLFlipBook
-    //       width={500}
-    //       height={500}
-    //       showCover={true}
-    //       className="mt-10 HTMLFlipBook"
-    //       useMouseEvents={false}
-    //       ref={bookRef}
-    //       onFlip={onPageFlip} // Trigger event when flipping the page
-    //     >
-    //       <div>
-    //         <BookCover imageUrl={story?.coverImage} />
-    //       </div>
-    //       {[...Array(storyChapterParsed?.chapters?.length)].map(
-    //         (item, index) => (
-    //           <div className="bg-white p-2 md:p-10 border" key={index}>
-    //             <StoryPages
-    //               pageNumber={index + 1}
-    //               isPageActive={currentPage === index}
-    //               storyChapter={storyChapterParsed?.chapters[index]}
-    //             />
-    //           </div>
-    //         )
-    //       )}
-    //     </HTMLFlipBook>
-    //     {count !== 0 && (
-    //       <div className="absolute -left-10 top-[250px]">
-    //         <div
-    //           className="flex flex-col gap-2"
-    //           onClick={() => {
-    //             bookRef.current.pageFlip().flipPrev();
-    //             setCount(count - 1);
-    //           }}
-    //         >
-    //           <IoIosArrowDropleftCircle size={30} />
-    //           <span className="text-xs">Prev Page</span>
-    //         </div>
-    //       </div>
-    //     )}
-    //     {count !== storyChapterParsed?.chapters?.length - 1 && (
-    //       <div className="absolute -right-5 top-[250px]">
-    //         <div
-    //           className="flex flex-col gap-2"
-    //           onClick={() => {
-    //             bookRef.current.pageFlip().flipNext();
-    //             setCount(count + 1);
-    //           }}
-    //         >
-    //           <IoIosArrowDroprightCircle size={30} />
-    //           <span className="text-xs">Next Page</span>
-    //         </div>
-    //       </div>
-    //     )}
-    //     <h2>current page: {currentPage}</h2>
-    //   </div>
-    // </div>
-    <div className="mt-6 md:mt-8 mx-auto container">
-      {/* <h2 className="font-bold text-4xl text-center">{story?.storySubject}</h2> */}
+    <div className="mt-6 md:mt-8 mx-auto container bg-slate-100">
       <h2 className="font-bold text-4xl text-center">
         {story?.storyTitle || story?.storySubject}
       </h2>
@@ -157,7 +98,6 @@ export default function StoryComponent() {
             width={400}
             height={500}
             showCover={true}
-            // onFlip={handlePageFlip} // Triggered on page flip
           >
             <div>
               <BookCover imageUrl={story?.coverImage} />

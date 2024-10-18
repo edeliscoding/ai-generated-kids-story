@@ -83,7 +83,7 @@ export default function SearchForm() {
   };
 
   return (
-    <Card className="p-6 max-w-2xl mx-auto lg:grid-span-2 w-full">
+    <Card className="p-6 max-w-2xl mx-auto w-full">
       {/* <form onSubmit={handleSubmit} className="space-y-4"> */}
       <form className="space-y-4">
         <div>
