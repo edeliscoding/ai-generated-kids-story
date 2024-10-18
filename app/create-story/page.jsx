@@ -30,6 +30,7 @@ import toast from "react-hot-toast";
 import { useAuth } from "../context/authContext";
 import { deductCredits } from "../data/deductCredits";
 import { Input } from "@/components/ui/input";
+import ImageSelection from "../components/storyTypeSelection";
 export default function StoryCreator() {
   const [subject, setSubject] = useState("");
   const [storyType, setStoryType] = useState("");
@@ -202,8 +203,9 @@ export default function StoryCreator() {
           </div>
 
           <div className="space-y-2">
-            <Label>Image Style</Label>
-            <RadioGroup
+            <Label className="">Image Style</Label>
+            <ImageSelection />
+            {/* <RadioGroup
               value={imageStyle}
               onValueChange={setImageStyle}
               className="flex space-x-4"
@@ -224,7 +226,7 @@ export default function StoryCreator() {
                 <RadioGroupItem value="pixel-style" id="pixel-style" />
                 <Label htmlFor="pixel-style">Pixel Style</Label>
               </div>
-            </RadioGroup>
+            </RadioGroup> */}
           </div>
         </form>
       </CardContent>

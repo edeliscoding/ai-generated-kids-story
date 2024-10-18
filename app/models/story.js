@@ -16,7 +16,8 @@ const StorySchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+StorySchema.index({ storyTitle: "text", storySubject: "text" });
 
 const Story = mongoose.models.Story || mongoose.model("Story", StorySchema);
-
+Story.createIndexes();
 export default Story;
