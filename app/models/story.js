@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 
 const StorySchema = new mongoose.Schema(
   {
+    storyTitle: String,
     storySubject: String,
     storyType: String,
     ageGroup: String,

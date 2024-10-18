@@ -29,12 +29,16 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAuth } from "../context/authContext";
 import { deductCredits } from "../data/deductCredits";
+import { Input } from "@/components/ui/input";
 export default function StoryCreator() {
   const [subject, setSubject] = useState("");
   const [storyType, setStoryType] = useState("");
   const [ageGroup, setAgeGroup] = useState("");
+  const [title, setTitle] = useState("");
   const [imageStyle, setImageStyle] = useState("");
   const [loading, setLoading] = useState(false);
+
+  console.log(title);
 
   const { user } = useUser();
   const { user: userContext, error, updateUser } = useAuth();
@@ -57,12 +61,14 @@ export default function StoryCreator() {
     const FINAL_PROMPT = CREATE_STORY_PROMPT.replace("{ageGroup}", ageGroup)
       .replace("{storyType}", storyType)
       .replace("{subject}", subject)
+      .replace("{title}", title)
       .replace("{imageStyle}", imageStyle);
 
     try {
       //   console.log(FINAL_PROMPT);
       const result = await chatSession.sendMessage(FINAL_PROMPT);
       const story = JSON.parse(result?.response.text());
+      console.log("story", story);
       // generate image
       const imageResponse = await axios.post("/api/generate-image", {
         prompt: `Add text with title:  ${story?.story_name} in bold text for book cover, ${story?.cover_image?.description}`,
@@ -102,6 +108,7 @@ export default function StoryCreator() {
     setLoading(true);
     try {
       const storyData = {
+        storyTitle: title,
         storySubject: subject,
         storyType,
         ageGroup,
@@ -145,6 +152,16 @@ export default function StoryCreator() {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <Label htmlFor="title">Title of the story</Label>
+            <Input
+              type="text"
+              placeholder="enter title or AI will generate one"
+              id="title"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+          </div>
           <div className="space-y-2">
             <Label htmlFor="subject">Subject of the story</Label>
             <Textarea

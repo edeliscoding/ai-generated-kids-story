@@ -2,20 +2,20 @@
 import { useEffect, useState } from "react";
 import { FaRegPauseCircle, FaRegPlayCircle } from "react-icons/fa";
 
-export const SpeechPlayer = ({ text }) => {
+export const SpeechPlayer = ({ text, isPageActive = true }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const utterance = new SpeechSynthesisUtterance(text);
 
   const flipbookContainer = document.querySelector(".HTMLFlipBook");
 
   // Cleanup function to stop speech when leaving the page
-  //   useEffect(() => {
-  //     return () => {
-  //       // Cancel any ongoing speech when component unmounts or page changes
-  //       window.speechSynthesis.cancel();
-  //       setIsPlaying(false);
-  //     };
-  //   }, [isPageActive]);
+  useEffect(() => {
+    return () => {
+      // Cancel any ongoing speech when component unmounts or page changes
+      window.speechSynthesis.cancel();
+      setIsPlaying(false);
+    };
+  }, [isPageActive]);
 
   const toggleSpeech = (e) => {
     e.preventDefault();

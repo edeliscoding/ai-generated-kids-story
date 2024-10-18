@@ -17,7 +17,8 @@ function MyStoriesCard({ story }) {
       />
       <div>
         <p className="text-[#1C1D22] text-base font-medium leading-normal">
-          {story.storySubject}
+          {/* {story.storySubject} */}
+          {story.storyTitle}
         </p>
         <p className="text-[#3C3F4A] text-sm font-normal leading-normal">
           Available soon. Get notified.

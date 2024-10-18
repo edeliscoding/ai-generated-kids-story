@@ -10,11 +10,11 @@ function Credits() {
   console.log("user from Credits", user);
   return (
     <>
-      <div className="flex gap-3 items-center">
+      <div className="flex gap-3 items-center text-sm md:text-base">
         <span>
           <Image src={"/coin.png"} alt="credit coin" width="48" height="48" />
         </span>
-        <span className="font-bold text-gray-700">
+        <span className="font-bold text-gray-700 hidden md:block">
           {user?.credit} credits left
         </span>
         <Link href="/buy-credits">
