@@ -72,16 +72,16 @@ export default function ImageSelection({ imagevalue, imageonValueChange }) {
       <div>
         <RadioGroupItem
           value="pixel-style"
-          id="option-3"
+          id="option-4"
           className="peer sr-only"
         />
         <Label
-          htmlFor="option-3"
+          htmlFor="option-4"
           className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
         >
           <img
             src="/imagestyle/pixelated-selection.webp?height=100&width=100"
-            alt="Option 3"
+            alt="Option 4"
             className="mb-3 h-28 w-28 rounded-md object-cover"
           />
           <span className="text-sm font-medium text-muted-foreground">

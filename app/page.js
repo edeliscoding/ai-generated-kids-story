@@ -6,7 +6,7 @@ import Email from "./components/Email";
 
 export default function Home() {
   return (
-    <div className="container mx-auto px-4 py-8 bg-slate-100">
+    <div className="container mx-auto px-4 py-8 ">
       <section className="mb-16">
         <Card className="overflow-hidden">
           <CardContent className="p-0">

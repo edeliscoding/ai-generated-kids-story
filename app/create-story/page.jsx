@@ -67,12 +67,26 @@ export default function StoryCreator() {
 
     try {
       //   console.log(FINAL_PROMPT);
+      // create kids story on description for {ageGroup} year old kids,
+      // {storyType} story, and all images in {imageStyle} style:
+      // use {title} for story name, {subject}, give me 5 chapters with detailed image text prompt for each of chapter
+      // and image prompt for story cover with story name, all in JSON field format
       const result = await chatSession.sendMessage(FINAL_PROMPT);
       const story = JSON.parse(result?.response.text());
-      console.log("story", story);
+      console.log("story from gemini ai", story);
+
       // generate image
+      const imagestyles = [
+        "Paper-cut: A scene intricately cut from paper, capturing the essence of the story.",
+        "3D-Cartoon: A vibrant 3D scene with cartoonish characters or elements that represent the story.",
+        "Water-color: A beautiful watercolor painting that evokes the mood and setting of the story.",
+        "Pixel: A charming pixel art illustration that reflects the retro video game aesthetic, or a more modern interpretation depending on the story.",
+      ];
+      // const imageResponse = await axios.post("/api/generate-image", {
+      //   prompt: `Add text with title:  ${story?.story_name},  in bold text for book ${story?.style} cover, ${story?.cover_image?.description}`,
+      // });
       const imageResponse = await axios.post("/api/generate-image", {
-        prompt: `Add text with title:  ${story?.story_name} in bold text for book cover, ${story?.cover_image?.description}`,
+        prompt: `Create a book cover design in the style of ${story?.style}. Add text with title:  ${story?.story_name}, ${story?.cover_image?.description}`,
       });
       console.log(imageResponse?.data?.imageUrl);
       //   console.log("from page", imageResponse?.data);

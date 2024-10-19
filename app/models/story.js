@@ -20,4 +20,5 @@ StorySchema.index({ storyTitle: "text", storySubject: "text" });
 
 const Story = mongoose.models.Story || mongoose.model("Story", StorySchema);
 Story.createIndexes();
+
 export default Story;
