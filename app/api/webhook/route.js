@@ -63,10 +63,19 @@ import { handleCreditsCheckoutCompleted } from "@/app/lib/payment-helpers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+// Initialize Stripe with the secret key
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || "");
+
 export async function POST(request) {
   const payload = await request.text();
   const sig = request.headers.get("stripe-signature");
+
+  if (!sig) {
+    return NextResponse.json(
+      { status: "Failed", message: "No stripe signature found" },
+      { status: 400 }
+    );
+  }
 
   let event;
 
@@ -74,7 +83,7 @@ export async function POST(request) {
     event = stripe.webhooks.constructEvent(
       payload,
       sig,
-      process.env.STRIPE_WEBHOOK_SECRET
+      process.env.STRIPE_WEBHOOK_SECRET || ""
     );
   } catch (err) {
     return NextResponse.json(
@@ -83,28 +92,47 @@ export async function POST(request) {
     );
   }
 
-  // Handle the event
-  switch (event.type) {
-    case "payment_intent.succeeded":
-      const paymentIntent = event.data.object;
-      const userId = session.metadata.userId;
-      const creditString = session.metadata.credits;
-      const credits = parseInt(creditString);
-      console.log("PaymentIntent was successful!");
-      await handleCreditsCheckoutCompleted({ userId, credits });
-      break;
-    case "payment_method.attached":
-      const paymentMethod = event.data.object;
-      console.log("PaymentMethod was attached to a Customer!");
-      break;
-    // ... handle other event types
-    default:
-      console.log(`Unhandled event type ${event.type}`);
+  try {
+    // Handle the event
+    switch (event.type) {
+      case "checkout.session.completed":
+        const session = event.data.object;
+
+        // Make sure we have the required metadata
+        if (!session.metadata?.userId || !session.metadata?.credits) {
+          throw new Error("Missing required metadata");
+        }
+
+        const userId = session.metadata.userId;
+        const creditString = session.metadata.credits;
+        const credits = parseInt(creditString);
+
+        if (isNaN(credits)) {
+          throw new Error("Invalid credits value");
+        }
+
+        console.log(
+          `Processing successful payment for user ${userId} with ${credits} credits`
+        );
+        await handleCreditsCheckoutCompleted({ userId, credits });
+        break;
+
+      case "payment_method.attached":
+        const paymentMethod = event.data.object;
+        console.log("PaymentMethod was attached to a Customer!");
+        break;
+
+      default:
+        console.log(`Unhandled event type ${event.type}`);
+    }
+
+    // Return a success response
+    return NextResponse.json({ received: true });
+  } catch (error) {
+    console.error("Error processing webhook:", error);
+    return NextResponse.json(
+      { status: "Failed", message: error.message },
+      { status: 500 }
+    );
   }
-
-  // Return a response to acknowledge receipt of the event
-  response.json({ received: true });
 }
-
-// Update the user's credits in your database
-// Retrieve the session from the database
