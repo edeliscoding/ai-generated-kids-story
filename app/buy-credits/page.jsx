@@ -6,9 +6,17 @@ import { useRouter } from "next/navigation";
 import { updateCredits } from "@/app/data/updateCredits";
 import { useAuth } from "../context/authContext";
 import toast from "react-hot-toast";
+import { loadStripe } from "@stripe/stripe-js";
 
+// Load Stripe outside the component to avoid reloading it on each render
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+);
 function BuyCreditsPage() {
   const { user, updateUser } = useAuth();
+  console.log("user fro useAuth Context", user);
+
+  const userId = user.clerkId;
 
   const router = useRouter();
   const [selectedOption, setSelectedOption] = useState(0);
@@ -51,6 +59,41 @@ function BuyCreditsPage() {
     }
   };
 
+  const handleStripeCheckout = async () => {
+    try {
+      const stripe = await stripePromise;
+      const price = priceOptions[selectedOption - 1].price;
+
+      // Call the backend API to create the Checkout session
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ price, userId, credits }),
+      });
+
+      const session = await response.json();
+      // if (response.status == 200) {
+      //   await updateCredits(credits);
+      //   updateUser({ credit: user.credit + credits });
+      // }
+
+      if (!session.id) {
+        throw new Error("No session ID returned from Stripe");
+      }
+      // Redirect to Stripe Checkout
+      const result = await stripe.redirectToCheckout({
+        sessionId: session.id,
+      });
+
+      if (result.error) {
+        toast.error(result.error.message);
+      }
+    } catch (error) {
+      console.error("Error updating credits:", error);
+      toast.error("Failed to add credits");
+    }
+  };
+
   return (
     <div className="min-h-screen flex justify-center items-center bg-blue-100">
       <div className="w-full max-w-4xl p-6 bg-white rounded-lg shadow-lg">
@@ -79,11 +122,21 @@ function BuyCreditsPage() {
           </div>
 
           {selectedOption === 0 ? null : (
-            <PayPalButton
-              //   onPaymentSuccess={onPaymentSuccess}
-              onSuccess={handleSuccess}
-              amount={Number(priceOptions[selectedOption - 1].price).toFixed(2)}
-            />
+            <>
+              <PayPalButton
+                //   onPaymentSuccess={onPaymentSuccess}
+                onSuccess={handleSuccess}
+                amount={Number(priceOptions[selectedOption - 1].price).toFixed(
+                  2
+                )}
+              />
+              <button
+                onClick={handleStripeCheckout}
+                className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-700"
+              >
+                Pay with Stripe
+              </button>
+            </>
           )}
         </div>
       </div>

@@ -195,9 +195,29 @@ export default function StoryCreator() {
                 <SelectValue placeholder="Select story type" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="story-book">Story Book</SelectItem>
+                {/* <SelectItem value="story-book">Story Book</SelectItem>
                 <SelectItem value="bed-story">Bed Story</SelectItem>
                 <SelectItem value="educational">Educational</SelectItem>
+              </SelectContent> */}
+                <SelectItem value="adventure">Adventure</SelectItem>
+                <SelectItem value="fantasy">Fantasy</SelectItem>
+                <SelectItem value="mystery">Mystery</SelectItem>
+                <SelectItem value="fairy-tale">Fairy Tale</SelectItem>
+                <SelectItem value="fable">Fable</SelectItem>
+                <SelectItem value="sci-fi">Science Fiction</SelectItem>
+                <SelectItem value="historical-fiction">
+                  Historical Fiction
+                </SelectItem>
+                <SelectItem value="humor">Humor</SelectItem>
+                <SelectItem value="educational">Educational</SelectItem>
+                <SelectItem value="friendship">Friendship</SelectItem>
+                <SelectItem value="mythology">Mythology</SelectItem>
+                <SelectItem value="superhero">Superhero</SelectItem>
+                <SelectItem value="animal-stories">Animal Stories</SelectItem>
+                <SelectItem value="bedtime-stories">Bedtime Stories</SelectItem>
+                <SelectItem value="moral-adventure">
+                  Adventure with Moral Lesson
+                </SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -212,6 +232,7 @@ export default function StoryCreator() {
                 <SelectItem value="0-2">0-2 years</SelectItem>
                 <SelectItem value="3-5">3-5 years</SelectItem>
                 <SelectItem value="5-8">5-8 years</SelectItem>
+                <SelectItem value="9-12">9-12 years</SelectItem>
               </SelectContent>
             </Select>
           </div>
