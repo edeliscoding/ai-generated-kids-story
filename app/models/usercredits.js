@@ -1,11 +1,7 @@
 const mongoose = require("mongoose");
 
 const userCreditsSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // Reference to the User model
-    required: true,
-  },
+  clerkId: { type: String, unique: true },
   creditsPurchased: {
     type: Number, // Credits purchased by the user
     required: true,
@@ -19,5 +15,8 @@ const userCreditsSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+const UserCredits =
+  mongoose.models.UserCredits ||
+  mongoose.model("UserCredits", userCreditsSchema);
 
-module.exports = mongoose.model("UserCredits", userCreditsSchema);
+export default UserCredits;

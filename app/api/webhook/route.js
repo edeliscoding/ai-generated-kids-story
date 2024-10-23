@@ -59,7 +59,10 @@
 
 //   return NextResponse.json({ received: true });
 // }
-import { handleCreditsCheckoutCompleted } from "@/app/lib/payment-helpers";
+import {
+  handleCreditsCheckoutCompleted,
+  insertPayment,
+} from "@/app/lib/payment-helpers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 
@@ -85,6 +88,7 @@ export async function POST(request) {
       sig,
       process.env.STRIPE_WEBHOOK_SECRET || ""
     );
+    console.log("event", event);
   } catch (err) {
     return NextResponse.json(
       { status: "Failed", message: err.message },
@@ -106,15 +110,34 @@ export async function POST(request) {
         const userId = session.metadata.userId;
         const creditString = session.metadata.credits;
         const credits = parseInt(creditString);
+        const amountPaid = (session.amount_total / 100).toFixed(2);
+
+        // Retrieve the line items, including the priceId
+        const lineItems = await stripe.checkout.sessions.listLineItems(
+          session.id,
+          {
+            expand: ["data.price.product"],
+          }
+        );
+        // Access the priceId from the line items
+        const priceId = lineItems.data[0].price.id;
+
+        console.log(`Price ID: ${priceId}`);
 
         if (isNaN(credits)) {
           throw new Error("Invalid credits value");
         }
 
-        console.log(
-          `Processing successful payment for user ${userId} with ${credits} credits`
-        );
+        console.log("Session:", session);
+        // const priceId = session.line_items?.data[0].price?.id;
+        // console.log("Price ID:", priceId);
+        // console.log(
+        //   `Processing successful payment for user ${userId} with ${credits} credits`
+        // );
+        // await handleCheckoutSessionCompleted({ session, stripe });
         await handleCreditsCheckoutCompleted({ userId, credits });
+        // await handleCreditsCheckoutCompleted();
+        await insertPayment({ userId, session, credits, priceId, amountPaid });
         break;
 
       case "payment_method.attached":
@@ -123,7 +146,7 @@ export async function POST(request) {
         break;
 
       default:
-        console.log(`Unhandled event type ${event.type}`);
+      // console.log(`Unhandled event type ${event.type}`);
     }
 
     // Return a success response

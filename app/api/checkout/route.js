@@ -16,7 +16,7 @@ export async function POST(req) {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "Credits",
+              name: `${credits} Credits`,
             },
             unit_amount: Math.round(price * 100), // Stripe expects the amount in cents
           },
@@ -31,9 +31,6 @@ export async function POST(req) {
       metadata: { userId, credits },
     });
 
-    // if (session.id) {
-    //   await updateCredits(credits);
-    // }
     console.log("Stripe session created:", session);
     // Return the session ID to the client
     return NextResponse.json({ id: session.id });

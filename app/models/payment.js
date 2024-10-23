@@ -1,11 +1,7 @@
 const mongoose = require("mongoose");
 
 const paymentSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User", // Reference to the User who made the payment
-    required: true,
-  },
+  clerkId: { type: String, required: true },
   stripePaymentId: {
     type: String, // The ID of the Stripe payment
     required: true,
@@ -39,5 +35,7 @@ const paymentSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+const Payment =
+  mongoose.models.Payment || mongoose.model("Payment", paymentSchema);
 
-module.exports = mongoose.model("Payment", paymentSchema);
+export default Payment;
