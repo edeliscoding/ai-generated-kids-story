@@ -88,7 +88,7 @@ export async function POST(request) {
       sig,
       process.env.STRIPE_WEBHOOK_SECRET || ""
     );
-    console.log("event", event);
+    // console.log("event", event);
   } catch (err) {
     return NextResponse.json(
       { status: "Failed", message: err.message },
@@ -122,13 +122,13 @@ export async function POST(request) {
         // Access the priceId from the line items
         const priceId = lineItems.data[0].price.id;
 
-        console.log(`Price ID: ${priceId}`);
+        // console.log(`Price ID: ${priceId}`);
 
         if (isNaN(credits)) {
           throw new Error("Invalid credits value");
         }
 
-        console.log("Session:", session);
+        // console.log("Session:", session);
         // const priceId = session.line_items?.data[0].price?.id;
         // console.log("Price ID:", priceId);
         // console.log(
@@ -142,7 +142,7 @@ export async function POST(request) {
 
       case "payment_method.attached":
         const paymentMethod = event.data.object;
-        console.log("PaymentMethod was attached to a Customer!");
+        // console.log("PaymentMethod was attached to a Customer!");
         break;
 
       default:

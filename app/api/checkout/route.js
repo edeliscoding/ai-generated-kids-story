@@ -6,7 +6,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 export async function POST(req) {
   try {
     const { price, userId, credits } = await req.json();
-    console.log("price", price, "userId", userId, "credits", credits);
+    // console.log("price", price, "userId", userId, "credits", credits);
 
     // Create a new Stripe Checkout session
     const session = await stripe.checkout.sessions.create({
@@ -31,7 +31,6 @@ export async function POST(req) {
       metadata: { userId, credits },
     });
 
-    console.log("Stripe session created:", session);
     // Return the session ID to the client
     return NextResponse.json({ id: session.id });
   } catch (err) {

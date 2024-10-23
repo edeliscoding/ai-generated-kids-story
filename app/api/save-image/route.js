@@ -51,10 +51,10 @@ export async function POST(request) {
   const imageRef = ref(storage, fileName);
 
   await uploadString(imageRef, base64Image, "base64");
-  console.log("Image uploaded");
+  // console.log("Image uploaded");
 
   const downloadUrl = await getDownloadURL(imageRef);
-  console.log("from save-image downloadUrl", downloadUrl);
+  // console.log("from save-image downloadUrl", downloadUrl);
   return NextResponse.json({ imageUrl: downloadUrl });
 }
 
