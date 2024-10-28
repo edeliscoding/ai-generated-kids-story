@@ -11,7 +11,11 @@ import Payment from "../models/payment";
 
 // }
 
-export async function handleCreditsCheckoutCompleted({ userId, credits }) {
+export async function handleCreditsCheckoutCompleted({
+  userId,
+  credits,
+  userIdMongo,
+}) {
   console.log("handleCreditsCheckoutCompleted called with userId:", userId);
 
   await connectToDb();
@@ -66,23 +70,29 @@ export async function updateCredits({ credits, userId }) {
 }
 
 export async function insertPayment({
+  userIdMongo,
   userId,
   credits,
   session,
   priceId,
   amountPaid,
+  provider,
 }) {
   await connectToDb();
   // Your insert payment logic here
   try {
     const payment = new Payment({
-      clerkId: userId,
-      stripePaymentId: session.id,
-      priceId: priceId,
+      userId: userIdMongo,
+      // clerkId: userId,
+      // stripePaymentId: session.id,
+      provider: provider,
+
+      // priceId: priceId,
       amount: amountPaid,
-      currency: "USD",
+      // currency: "USD",
       status: "completed",
-      creditsAdded: credits,
+      // creditsAdded: credits,
+      createdAt: new Date(),
     });
     await payment.save();
     return NextResponse.json(
@@ -97,36 +107,22 @@ export async function insertPayment({
     );
   }
 }
-// clerkId: { type: String, unique: true, required: true },
-// stripePaymentId: {
-//   type: String, // The ID of the Stripe payment
-//   required: true,
-// },
-// priceId: {
-//   type: String, // The ID of the price in Stripe
-//   required: true,
-// },
-// amount: {
-//   type: Number, // Amount paid in the transaction
-//   required: true,
-// },
-// currency: {
-//   type: String, // Currency of the transaction (e.g., 'USD')
-//   required: true,
-// },
-// status: {
-//   type: String, // Payment status (e.g., 'pending', 'completed', 'failed')
-//   required: true,
-// },
-// creditsAdded: {
-//   type: Number, // Credits added to the user after successful payment
-//   default: 0,
-// },
-// refundedAt: {
-//   type: Date, // Date when the payment was refunded
-//   default: null, // Set to null if not refunded
-// },
-// createdAt: {
-//   type: Date,
-//   default: Date.now,
-// },
+
+export async function getTransactionId(session) {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/success`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      session_id: session.id,
+    }),
+  });
+
+  if (!res.ok) {
+    console.error("Error processing payment in success route");
+  }
+
+  const data = await res.json();
+  return data;
+}

@@ -1,26 +1,44 @@
 const mongoose = require("mongoose");
 
 const paymentSchema = new mongoose.Schema({
-  clerkId: { type: String, required: true },
-  stripePaymentId: {
-    type: String, // The ID of the Stripe payment
+  // clerkId: { type: String, required: true },
+  // stripePaymentId: {
+  //   type: String, // The ID of the Stripe payment
+  //   required: true,
+  // },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
-  priceId: {
-    type: String, // The ID of the price in Stripe
-    required: true,
+  transactionId: {
+    type: String, // Unique transaction ID from Stripe or PayPal
+    // required: true,
   },
+  // priceId: {
+  //   type: String, // The ID of the price in Stripe
+  //   required: true,
+  // },
   amount: {
     type: Number, // Amount paid in the transaction
     required: true,
   },
   currency: {
     type: String, // Currency of the transaction (e.g., 'USD')
-    required: true,
+    // required: true,
+  },
+  // provider: {
+  //   type: String,
+  //   required: true, // 'stripe' or 'paypal'
+  // },
+  provider: {
+    type: String,
+    enum: ["stripe", "paypal"],
+    required: true, // 'stripe' or 'paypal'
   },
   status: {
     type: String, // Payment status (e.g., 'pending', 'completed', 'failed')
-    required: true,
+    // required: true,
   },
   creditsAdded: {
     type: Number, // Credits added to the user after successful payment

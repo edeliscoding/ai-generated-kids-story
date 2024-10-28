@@ -60,6 +60,7 @@
 //   return NextResponse.json({ received: true });
 // }
 import {
+  getTransactionId,
   handleCreditsCheckoutCompleted,
   insertPayment,
 } from "@/app/lib/payment-helpers";
@@ -103,10 +104,15 @@ export async function POST(request) {
         const session = event.data.object;
 
         // Make sure we have the required metadata
-        if (!session.metadata?.userId || !session.metadata?.credits) {
+        if (
+          !session.metadata?.userId ||
+          !session.metadata?.credits ||
+          !session.metadata?.userIdMongo
+        ) {
           throw new Error("Missing required metadata");
         }
-
+        const provider = session.metadata.provider;
+        const userIdMongo = session.metadata.userIdMongo;
         const userId = session.metadata.userId;
         const creditString = session.metadata.credits;
         const credits = parseInt(creditString);
@@ -135,9 +141,18 @@ export async function POST(request) {
         //   `Processing successful payment for user ${userId} with ${credits} credits`
         // );
         // await handleCheckoutSessionCompleted({ session, stripe });
-        await handleCreditsCheckoutCompleted({ userId, credits });
+        await handleCreditsCheckoutCompleted({ userId, credits, userIdMongo });
         // await handleCreditsCheckoutCompleted();
-        await insertPayment({ userId, session, credits, priceId, amountPaid });
+        // await insertPayment({
+        //   userId,
+        //   session,
+        //   credits,
+        //   priceId,
+        //   amountPaid,
+        //   userIdMongo,
+        //   provider,
+        // });
+        await getTransactionId(session);
         break;
 
       case "payment_method.attached":

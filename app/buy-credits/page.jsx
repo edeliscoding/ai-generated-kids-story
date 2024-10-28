@@ -15,7 +15,9 @@ const stripePromise = loadStripe(
 function BuyCreditsPage() {
   const { user, updateUser } = useAuth();
   console.log("user fro useAuth Context", user);
+  const [provider, setProvider] = useState("stripe");
 
+  const userIdMongo = user._id;
   const userId = user.clerkId;
 
   const router = useRouter();
@@ -48,6 +50,7 @@ function BuyCreditsPage() {
   //   toast.success("Credits added successfully");
   // };
   const handleSuccess = async () => {
+    setProvider("paypal");
     try {
       await updateCredits(credits);
       updateUser({ credit: user.credit + credits });
@@ -60,6 +63,7 @@ function BuyCreditsPage() {
   };
 
   const handleStripeCheckout = async () => {
+    setProvider("stripe");
     try {
       const stripe = await stripePromise;
       const price = priceOptions[selectedOption - 1].price;
@@ -68,7 +72,7 @@ function BuyCreditsPage() {
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ price, userId, credits }),
+        body: JSON.stringify({ price, userId, credits, userIdMongo, provider }),
       });
 
       const session = await response.json();

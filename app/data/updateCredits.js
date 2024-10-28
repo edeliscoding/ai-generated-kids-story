@@ -30,6 +30,7 @@ import Users from "@/app/models/users";
 import { revalidatePath } from "next/cache";
 
 export async function updateCredits(credits) {
+  console.log("credits from updateCredts", credits);
   const { userId } = auth();
   await connectToMongoDB();
 
@@ -38,7 +39,7 @@ export async function updateCredits(credits) {
     if (!user) {
       throw new Error("User not found");
     }
-
+    console.log("user from updateCredits", user);
     user.credit = user.credit + credits;
     await user.save();
 

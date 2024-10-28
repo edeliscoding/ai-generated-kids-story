@@ -79,6 +79,7 @@ import toast from "react-hot-toast";
 export default function SuccessPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const credits = parseInt(searchParams.get("credits"), 10);
   const { user, updateUser } = useAuth();
   const [updatedCredits, setUpdatedCredits] = useState(false);
 
@@ -123,6 +124,9 @@ export default function SuccessPage() {
           ? "Your credits have been updated."
           : "Your credits will be updated shortly."}
       </p> */}
+      <p className="text-lg mb-4 font-normal">
+        <span className="font-bold">{credits}</span> Credits added
+      </p>
       <button
         onClick={() => router.push("/dashboard")}
         className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
@@ -132,3 +136,38 @@ export default function SuccessPage() {
     </div>
   );
 }
+// "use client";
+// import { useEffect, useState } from "react";
+
+// export default function SuccessPage() {
+//   const [transactionId, setTransactionId] = useState(null);
+
+//   useEffect(() => {
+//     // Extract session_id from the URL query parameters
+//     const queryParams = new URLSearchParams(window.location.search);
+//     const sessionId = queryParams.get("session_id");
+
+//     // Call the /api/success route to get payment details
+//     if (sessionId) {
+//       fetch(`/api/success?session_id=${sessionId}`)
+//         .then((res) => res.json())
+//         .then((data) => {
+//           setTransactionId(data.paymentIntentId); // Store transaction ID for display
+//         })
+//         .catch((error) => {
+//           console.error("Error fetching payment details:", error);
+//         });
+//     }
+//   }, []);
+
+//   return (
+//     <div>
+//       <h1>Payment Successful!</h1>
+//       {transactionId ? (
+//         <p>Your Transaction ID: {transactionId}</p>
+//       ) : (
+//         <p>Loading transaction details...</p>
+//       )}
+//     </div>
+//   );
+// }

@@ -7,6 +7,26 @@ const UserSchema = new mongoose.Schema(
     userEmail: String,
     userImage: String,
     credit: { type: Number, default: 2 },
+    stripeCustomerId: {
+      type: String,
+      unique: true,
+      sparse: true, // Populated when user pays with Stripe
+    },
+    paypalCustomerId: {
+      type: String,
+      unique: true,
+      sparse: true, // Populated when user pays with PayPal
+    },
+    paymentMethods: [
+      {
+        provider: {
+          type: String, // 'stripe' or 'paypal'
+        },
+        paymentMethodId: {
+          type: String, // The method ID for Stripe or PayPal
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

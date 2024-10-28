@@ -79,3 +79,26 @@ body {
     @apply bg-background text-foreground;
   }
 }
+
+.editor-container {
+  border: 2px solid transparent;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.editor-container.drag-over {
+  border-color: #2563eb;
+  background-color: rgba(37, 99, 235, 0.1);
+}
+
+.draggable-image {
+  display: inline-block;
+  max-width: 100%;
+  height: auto;
+  margin: 1rem 0;
+}
+
+.ProseMirror {
+  min-height: 200px;
+  padding: 1rem;
+}

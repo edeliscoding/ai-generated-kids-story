@@ -33,6 +33,8 @@ function PayPalButton({ amount, onSuccess }) {
         }}
         onApprove={(data, actions) => {
           return actions.order.capture().then((details) => {
+            const payerId = details.payer.payer_id;
+            console.log("Paypal payerId", payerId);
             onSuccess(details);
           });
         }}

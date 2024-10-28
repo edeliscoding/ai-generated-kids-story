@@ -163,6 +163,20 @@ export default function Navigation() {
         </Link>
       </NavigationMenuItem>
       <NavigationMenuItem>
+        <Link href="/stories" legacyBehavior passHref>
+          <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+            My Custom Stories
+          </NavigationMenuLink>
+        </Link>
+      </NavigationMenuItem>
+      <NavigationMenuItem>
+        <Link href="/stories/new" legacyBehavior passHref>
+          <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+            Create Own Story
+          </NavigationMenuLink>
+        </Link>
+      </NavigationMenuItem>
+      <NavigationMenuItem>
         <Link href="/contact-us" legacyBehavior passHref>
           <NavigationMenuLink className={navigationMenuTriggerStyle()}>
             Contact Us
@@ -239,6 +253,13 @@ export default function Navigation() {
                   onClick={() => setIsOpen(false)}
                 >
                   Explore Stories
+                </Link>
+                <Link
+                  href="/stories"
+                  className="text-lg font-semibold"
+                  onClick={() => setIsOpen(false)}
+                >
+                  My Custom Stories
                 </Link>
                 <Link
                   href="/contact-us"
