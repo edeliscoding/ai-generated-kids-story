@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import ImageResize from "tiptap-extension-resize-image";
 import axios from "axios";
+import { getAutocompleteSuggestion } from "@/app/utils/autocomplete";
 
 import Link from "@tiptap/extension-link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -49,6 +50,7 @@ const TiptapEditor = ({
   const [currentImage, setCurrentImage] = useState(null);
   const [story, setStory] = useState(null);
   const [showImagePreview, setShowImagePreview] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   console.log("content", content);
   //   const [selectedImage, setSelectedImage] = useState(null);
   //   const [selectedText, setSelectedText] = useState("");
@@ -205,6 +207,68 @@ const TiptapEditor = ({
     setTitle(e.target.value);
   };
 
+  // // Function to call the AI API to fetch the completion text
+  // const fetchAIText = async (content) => {
+  //   try {
+  //     const response = await axios.post(
+  //       "https://api.openai.com/v1/chat/completions",
+  //       {
+  //         prompt: content,
+  //         max_tokens: 50,
+  //       },
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${process.env.OPENAI_KEY}`,
+  //         },
+  //       }
+  //     );
+  //     return response.data.choices[0].text;
+  //   } catch (error) {
+  //     console.error("Error fetching AI text:", error);
+  //     return "";
+  //   }
+  // };
+  // // Magic Wand button handler to insert AI-generated text
+  // const handleMagicWand = useCallback(async () => {
+  //   if (!editor) return;
+
+  //   // Get current editor content as plain text
+  //   const currentText = editor.getText();
+
+  //   // Fetch AI-generated text based on current content
+  //   const aiText = await fetchAIText(currentText);
+
+  //   // Insert AI text at the current cursor position
+  //   if (aiText) {
+  //     editor.chain().focus().insertContent(aiText).run();
+  //   }
+  // }, [editor]);
+
+  const handleAutoComplete = useCallback(async () => {
+    if (!editor || isLoading) return;
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/autocomplete", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ content }),
+      });
+
+      const { suggestion } = await response.json();
+      if (editor) {
+        editor.chain().focus().insertContent(suggestion).run();
+      }
+    } catch (error) {
+      console.error("Error generating auto-completion:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  }, [editor, content, isLoading]);
+
   useEffect(() => {
     return () => {
       if (editor) editor.destroy();
@@ -289,6 +353,7 @@ const TiptapEditor = ({
       console.error("Error saving story:", error);
     }
   };
+  // save every 30 seconds
   //   useEffect(() => {
   //     if (!editor) return;
 
@@ -360,6 +425,34 @@ const TiptapEditor = ({
               >
                 <LinkIcon className="h-4 w-4" />
               </Button>
+
+              {/* <Button
+                data-tooltip-target="magic-wand"
+                onClick={handleAutoComplete}
+                className="self-end bg-yellow-500 hover:bg-yellow-600 ml-auto"
+              >
+                ✨ Magic Wand ✨
+              </Button>
+              <div
+                id="magic-wand"
+                role="tooltip"
+                class="absolute z-10 invisible inline-block px-3 py-2 text-sm font-medium text-white transition-opacity duration-300 bg-gray-900 rounded-lg shadow-sm opacity-0 tooltip dark:bg-gray-700"
+              >
+                Tooltip content
+                <div class="tooltip-arrow" data-popper-arrow></div>
+              </div> */}
+              <div className="relative group inline-block ml-auto">
+                <button
+                  className="px-4 py-2 text-white bg-yellow-500 hover:bg-yellow-600  rounded-md"
+                  onClick={handleAutoComplete}
+                >
+                  ✨ Magic Wand ✨
+                </button>
+
+                <div class="absolute left-15 bottom-full mb-2 w-max px-3 py-1 text-sm text-white bg-gray-800 rounded-md opacity-0 transition-opacity duration-300 transform -translate-x-1/2 group-hover:opacity-100">
+                  Auto-complete your text
+                </div>
+              </div>
             </div>
             {editor && (
               <div className="border rounded-md p-4 min-h-[200px] focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">

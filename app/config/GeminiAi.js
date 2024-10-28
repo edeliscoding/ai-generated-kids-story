@@ -25,6 +25,13 @@ const generationConfig = {
   responseMimeType: "application/json",
 };
 
+// Define dynamic prompt templates for different use cases
+// const createStoryPrompt = (description) =>
+//   `Create a kids story for 5-8 year olds. Story description: ${description}. The story should be educational and illustrated in paper cut style, including chapter titles and prompts for images in JSON format.`;
+
+// const autocompletePrompt = (currentText) =>
+//   `Continue the story based on the following text: "${currentText}". Provide a seamless continuation for an engaging narrative.`;
+
 export const chatSession = model.startChat({
   generationConfig,
   // safetySettings: Adjust safety settings
@@ -51,3 +58,66 @@ export const chatSession = model.startChat({
 
 //   const result = await chatSession.sendMessage("INSERT_INPUT_HERE");
 //   console.log(result.response.text());
+// Start a chat session with a function to handle multiple prompt types
+// export const getAIResponse = async (promptType, textInput) => {
+//   const promptText =
+//     promptType === "createStory"
+//       ? createStoryPrompt(textInput)
+//       : autocompletePrompt(textInput);
+
+//   const chatSession = model.startChat({
+//     generationConfig,
+//     history: [
+//       {
+//         role: "user",
+//         parts: [
+//           {
+//             text: promptText,
+//           },
+//         ],
+//       },
+//     ],
+//   });
+
+//   // try {
+//   //   // Call getResponse and handle the data format carefully
+//   //   // const response = await chatSession.getResponse();
+//   //   const result = await model.generateContent("Explain how AI works");
+
+//   //   // Inspect the structure of response to ensure proper data extraction
+//   //   if (result) {
+//   //     return result; // Or access response.data.content, response.data[0], etc. based on the API structure
+//   //   } else {
+//   //     console.warn("Response structure is not as expected:", response);
+//   //     return undefined;
+//   //   }
+//   //   // console.log("response", response);
+//   //   // return response.data;
+//   // } catch (error) {
+//   //   console.error("Error with Gemini API response:", error);
+//   //   return undefined; // Return undefined in case of error to avoid further issues
+//   // }
+//   try {
+//     const response = await chatSession.getResponse();
+
+//     // Check the prompt type to handle JSON parsing for `createStory`
+//     if (promptType === "createStory") {
+//       // Assume `response.data` contains JSON-formatted text
+//       try {
+//         return JSON.parse(response?.data?.text); // Parse JSON for story structure
+//       } catch (jsonError) {
+//         console.error("Failed to parse JSON:", jsonError);
+//         return undefined;
+//       }
+//     } else if (promptType === "autocomplete") {
+//       // Return plain text for autocomplete
+//       return response?.data?.text; // Ensure `text` field exists and contains plain text
+//     } else {
+//       console.warn("Unrecognized prompt type:", promptType);
+//       return undefined;
+//     }
+//   } catch (error) {
+//     console.error("Error with Gemini API response:", error);
+//     return undefined;
+//   }
+// };

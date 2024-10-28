@@ -19,7 +19,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { chatSession } from "../config/GeminiAi";
+import { chatSession, getAIResponse } from "../config/GeminiAi";
 import { set } from "mongoose";
 import axios from "axios";
 import Modal from "../components/Modal";
@@ -39,12 +39,13 @@ export default function StoryCreator() {
   const [imageStyle, setImageStyle] = useState("");
   const [loading, setLoading] = useState(false);
 
-  console.log(title);
+  // console.log(title);
 
   const { user } = useUser();
   const { user: userContext, error, updateUser } = useAuth();
   const router = useRouter();
   const CREATE_STORY_PROMPT = process.env.NEXT_PUBLIC_CREATE_STORY_PROMPT;
+  const AUTOCOMPLETE_PROMPT = process.env.NEXT_PUBLIC_AUTOCOMPLETE_PROMPT;
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -65,16 +66,26 @@ export default function StoryCreator() {
       .replace("{title}", title)
       .replace("{imageStyle}", imageStyle);
 
+    // Example usage for a rich text editor's autocomplete feature
+    // const response = await getAIResponse("autocomplete", currentEditorText);
+
+    // Example usage for story generation
+    // const storyResponse = await getAIResponse("createStory", storyDescription);
+    // const AUTOCOMPLETE_PROMPT = AUTOCOMPLETE_PROMPT.replace({currentText}, )
     try {
       //   console.log(FINAL_PROMPT);
       // create kids story on description for {ageGroup} year old kids,
       // {storyType} story, and all images in {imageStyle} style:
       // use {title} for story name, {subject}, give me 5 chapters with detailed image text prompt for each of chapter
       // and image prompt for story cover with story name, all in JSON field format
-      const result = await chatSession.sendMessage(FINAL_PROMPT);
-      const story = JSON.parse(result?.response.text());
-      console.log("story from gemini ai", story);
 
+      const result = await chatSession.sendMessage(FINAL_PROMPT);
+      // const result = await getAIResponse("createStory", FINAL_PROMPT);
+      console.log("Result", result);
+
+      const story = JSON.parse(result?.response.text());
+      // const returnedResult = result.response.text();
+      console.log("story", story);
       // generate image
       const imagestyles = [
         "Paper-cut: A scene intricately cut from paper, capturing the essence of the story.",

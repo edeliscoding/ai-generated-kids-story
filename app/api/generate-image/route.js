@@ -42,8 +42,8 @@ const replicate = new Replicate({
 });
 
 async function pollForImage(prediction) {
-  const maxAttempts = 60; // 5 minutes total
-  const delayBetweenAttempts = 5000; // 5 seconds
+  const maxAttempts = 20; // 5 minutes total
+  const delayBetweenAttempts = 2000; // 5 seconds
 
   for (let attempt = 0; attempt < maxAttempts; attempt++) {
     const output = await replicate.predictions.get(prediction.id);
@@ -83,10 +83,11 @@ export async function POST(request) {
       input: {
         aspect_ratio: "1:1",
         disable_safety_checker: false,
+        megapixels: "0.25",
         go_fast: true,
         num_outputs: 1,
         output_format: "png", // Changed to PNG
-        output_quality: 80,
+        output_quality: 75,
         prompt: prompt,
       },
     });
