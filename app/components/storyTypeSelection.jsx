@@ -1,5 +1,6 @@
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import Image from "next/image";
 
 export default function ImageSelection({ imagevalue, imageonValueChange }) {
   return (
