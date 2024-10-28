@@ -20,18 +20,20 @@ export default async function StoriesPage() {
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">My Stories</h1>
       <div className="grid gap-4">
-        {stories.map((story) => (
-          <Link
-            href={`/stories/${story._id}`}
-            key={story._id}
-            className="p-4 border rounded hover:bg-gray-100"
-          >
-            <h2 className="text-xl font-semibold">{story.title}</h2>
-            <p className="text-gray-600">
-              Last edited: {new Date(story.lastSaved).toLocaleString()}
-            </p>
-          </Link>
-        ))}
+        {!stories
+          ? "No Custom stories created. Start creating!"
+          : stories.map((story) => (
+              <Link
+                href={`/stories/${story._id}`}
+                key={story._id}
+                className="p-4 border rounded hover:bg-gray-100"
+              >
+                <h2 className="text-xl font-semibold">{story.title}</h2>
+                <p className="text-gray-600">
+                  Last edited: {new Date(story.lastSaved).toLocaleString()}
+                </p>
+              </Link>
+            ))}
       </div>
     </div>
   );
