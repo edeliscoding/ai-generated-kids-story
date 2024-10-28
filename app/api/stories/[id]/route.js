@@ -44,6 +44,8 @@ import CustomStory from "@/app/models/customstory";
 import { NextRequest, NextResponse } from "next/server";
 import connectToDatabase from "@/app/lib/mongodb";
 import { ObjectId } from "mongodb";
+import { auth } from "@clerk/nextjs/server";
+import { getUserIdByClerkId } from "@/app/lib/getUser-helper";
 
 export async function GET(request, { params }) {
   const storyId = params.id;
@@ -60,10 +62,6 @@ export async function GET(request, { params }) {
 
     const story = await CustomStory.findById(storyId);
 
-    if (!story) {
-      return NextResponse.json({ message: "Story not found" }, { status: 404 });
-    }
-
     return NextResponse.json(story);
   } catch (error) {
     console.error("Error fetching story:", error);
@@ -75,11 +73,13 @@ export async function GET(request, { params }) {
 }
 
 export async function PUT(request, { params }) {
-  console.log("PUt api called", request);
   const storyId = params.id;
-  const data = await request.json();
-  const { title, content, gallery, status, author } = data;
-
+  const { userId } = auth();
+  const user = await getUserIdByClerkId(userId);
+  console.log("user from Put", user);
+  if (!userId) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
   // title: title,
   // content: editor.getHTML(),
   // gallery: gallery,
@@ -87,13 +87,33 @@ export async function PUT(request, { params }) {
   // author: userContext._id,
   try {
     await connectToDatabase();
-    const updatedStory = await CustomStory.findByIdAndUpdate(storyId, {
-      title,
-      content,
-      gallery,
-      status,
-      author,
-    });
+
+    // First, fetch the story to check ownership
+    const story = await CustomStory.findById(storyId);
+    if (!story) {
+      return NextResponse.json({ message: "Story not found" }, { status: 404 });
+    }
+    // Check if the authenticated user is the author
+    if (story.author.toString() !== user.toString()) {
+      return NextResponse.json(
+        { message: "Unauthorized: You can only edit your own stories" },
+        { status: 403 }
+      );
+    }
+
+    const data = await request.json();
+    const { title, content, gallery, status, author } = data;
+    const updatedStory = await CustomStory.findByIdAndUpdate(
+      storyId,
+      {
+        title,
+        content,
+        gallery,
+        status,
+        // author,
+      },
+      { new: true }
+    );
     return NextResponse.json(
       { message: "Successfully updated", updatedStory },
       { status: 201 }

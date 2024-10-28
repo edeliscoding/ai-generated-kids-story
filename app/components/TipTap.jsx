@@ -109,19 +109,6 @@ const TiptapEditor = ({
 
   const editor = useEditor({
     extensions: [
-      //   Image.extend({
-      //     addAttributes() {
-      //       return {
-      //         ...this.parent?.(),
-      //         width: {
-      //           default: "auto",
-      //         },
-      //         height: {
-      //           default: "auto",
-      //         },
-      //       };
-      //     },
-      //   }),
       ImageResize,
       StarterKit,
       Underline,
@@ -340,16 +327,19 @@ const TiptapEditor = ({
       }
 
       if (response.status === 201) {
-        console.log("Story saved successfully");
-        toast.success("Story Updated Successfully");
+        console.log("Story updated successfully", response);
+
         setStory(response.data);
+        toast.success("Story Updated Successfully");
         if (!storyId) {
-          toast.success("Story Saved Successfuly");
+          console.log("Story saved successfully", response);
           router.push(`/stories/${response.data._id}`);
+          toast.success("Story Saved Successfuly");
         }
       }
     } catch (error) {
       console.error("Error saving story:", error);
+      toast.error("You can only edit your own story");
     }
   };
   // save every 30 seconds
