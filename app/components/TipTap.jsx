@@ -6,7 +6,6 @@ import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
 import ImageResize from "tiptap-extension-resize-image";
 import axios from "axios";
-import { getAutocompleteSuggestion } from "@/app/utils/autocomplete";
 
 import Link from "@tiptap/extension-link";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

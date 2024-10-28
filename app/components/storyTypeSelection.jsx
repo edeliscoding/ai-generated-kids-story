@@ -19,7 +19,9 @@ export default function ImageSelection({ imagevalue, imageonValueChange }) {
           htmlFor="option-1"
           className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
         >
-          <img
+          <Image
+            width={100}
+            height={100}
             src="/imagestyle/3d-cartoon-selection.webp?height=100&width=100"
             alt="Option 1"
             className="mb-3 h-28 w-28 rounded-md object-cover"
@@ -39,7 +41,9 @@ export default function ImageSelection({ imagevalue, imageonValueChange }) {
           htmlFor="option-2"
           className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
         >
-          <img
+          <Image
+            width={100}
+            height={100}
             src="/imagestyle/paper-cut-selection.webp?height=100&width=100"
             alt="Option 2"
             className="mb-3 h-28 w-28 rounded-md object-cover"
@@ -59,7 +63,9 @@ export default function ImageSelection({ imagevalue, imageonValueChange }) {
           htmlFor="option-3"
           className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
         >
-          <img
+          <Image
+            width={100}
+            height={100}
             src="/imagestyle/water-color-selection.webp?height=100&width=100"
             alt="Option 3"
             className="mb-3 h-28 w-28 rounded-md object-cover"
@@ -79,7 +85,9 @@ export default function ImageSelection({ imagevalue, imageonValueChange }) {
           htmlFor="option-4"
           className="flex flex-col items-center justify-between rounded-md border-2 border-muted bg-popover p-4 hover:bg-accent hover:text-accent-foreground peer-data-[state=checked]:border-primary [&:has([data-state=checked])]:border-primary"
         >
-          <img
+          <Image
+            width={100}
+            height={100}
             src="/imagestyle/pixelated-selection.webp?height=100&width=100"
             alt="Option 4"
             className="mb-3 h-28 w-28 rounded-md object-cover"
