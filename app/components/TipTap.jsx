@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
+import ImageResize from "tiptap-extension-resize-image";
 import axios from "axios";
 
 import Link from "@tiptap/extension-link";
@@ -107,6 +108,20 @@ const TiptapEditor = ({
 
   const editor = useEditor({
     extensions: [
+      //   Image.extend({
+      //     addAttributes() {
+      //       return {
+      //         ...this.parent?.(),
+      //         width: {
+      //           default: "auto",
+      //         },
+      //         height: {
+      //           default: "auto",
+      //         },
+      //       };
+      //     },
+      //   }),
+      ImageResize,
       StarterKit,
       Underline,
       TiptapImage.configure({
