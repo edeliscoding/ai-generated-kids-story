@@ -19,6 +19,7 @@ export async function GET() {
 }
 
 export async function POST(request) {
+  console.log("API/stories/post called");
   try {
     await mongoDb();
 
@@ -43,10 +44,12 @@ export async function POST(request) {
     console.log("newCustomStory", newCustomStory);
     await newCustomStory.save();
 
-    return NextResponse.json(newCustomStory, { status: 201 });
+    return NextResponse.json(newCustomStory, { status: 200 });
 
     // Option 2: If you want to redirect directly from server
-    // return NextResponse.redirect(new URL(`/stories/${newCustomStory._id}`, request.url));
+    // return NextResponse.redirect(
+    //   new URL(`/stories/${newCustomStory._id}`, request.url)
+    // );
   } catch (error) {
     console.error("Error creating story:", error);
     return NextResponse.json(

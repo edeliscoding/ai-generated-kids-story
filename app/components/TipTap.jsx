@@ -152,15 +152,25 @@ const TiptapEditor = ({
       });
 
       if (imageResponse.status === 200) {
+        // imageurl from flux-dev
         const imageUrl = imageResponse?.data?.imageUrl;
+        // add saving to firebase folder here
+
         console.log("From flux-dev", imageUrl);
         await new Promise((resolve) => setTimeout(resolve, 1500));
+
         const newImage = {
           id: Date.now(),
           prompt: imagePrompt,
           // url: "/api/placeholder/512/512",
           url: imageUrl,
         };
+        // const newImage = {
+        //   id: Date.now(),
+        //   prompt: imagePrompt,
+        //   // url: "/api/placeholder/512/512",
+        //   url: FirebaseStorageImageUrl,
+        // };
         setCurrentImage(newImage);
         setShowImagePreview(true);
       } else {
@@ -328,18 +338,21 @@ const TiptapEditor = ({
 
       if (response.status === 201) {
         console.log("Story updated successfully", response);
-
         setStory(response.data);
         toast.success("Story Updated Successfully");
-        if (!storyId) {
-          console.log("Story saved successfully", response);
-          router.push(`/stories/${response.data._id}`);
-          toast.success("Story Saved Successfuly");
-        }
+
+        // if (!storyId) {
+        //   console.log("Story saved successfully", response);
+        //   // router.push(`/stories/${response.data._id}`);
+        //   toast.success("Story Saved Successfuly");
+        // }
+      } else if (response.status === 200) {
+        console.log("Story saved successfully", response);
+        router.push(`/stories/${response.data._id}`);
+        toast.success("Story Saved Successfuly");
       }
     } catch (error) {
       console.error("Error saving story:", error);
-      toast.error("You can only edit your own story");
     }
   };
   // save every 30 seconds
